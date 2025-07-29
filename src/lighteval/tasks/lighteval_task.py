@@ -371,6 +371,7 @@ class LightevalTask:
                     task.trust_dataset,
                     task.dataset_filter,
                     task.dataset_revision,
+                    task.dataset_files,
                 )
                 for task in tasks.values()
             ]
@@ -385,6 +386,7 @@ class LightevalTask:
                             task.trust_dataset,
                             task.dataset_filter,
                             task.dataset_revision,
+                            task.dataset_files,
                         )
                         for task in tasks.values()
                     ],
