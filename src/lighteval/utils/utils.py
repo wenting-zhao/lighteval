@@ -205,6 +205,7 @@ def download_dataset_worker(
     trust_dataset: bool,
     dataset_filter: Callable[[dict], bool] | None = None,
     revision: str | None = None,
+    data_files: str | None = None,
 ) -> DatasetDict:
     """
     Worker function to download a dataset from the HuggingFace Hub.
@@ -218,6 +219,7 @@ def download_dataset_worker(
         download_mode=None,
         trust_remote_code=trust_dataset,
         revision=revision,
+        data_files=data_files,
     )
 
     if dataset_filter is not None:

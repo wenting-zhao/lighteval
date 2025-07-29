@@ -71,7 +71,6 @@ class LightevalTaskConfig:
     prompt_function: Callable[
         [dict, str], Doc
     ]  # The prompt function should be used to map a line in the dataset to a Sample
-    hf_repo: str
     hf_subset: str
     metrics: ListLike[Metric]  # List of metric , should be configurable
 
@@ -79,6 +78,8 @@ class LightevalTaskConfig:
     hf_revision: str | None = None
     hf_filter: Callable[[dict], bool] | None = None
     hf_avail_splits: ListLike[str] = field(default_factory=lambda: ["train", "validation", "test"])
+    hf_repo: str = ""
+    data_files: str = ""
 
     # We default to false, to reduce security issues
     trust_dataset: bool = False
@@ -170,9 +171,15 @@ class LightevalTask:
         self.dataset_revision = config.hf_revision
         self.dataset_filter = config.hf_filter
         self.trust_dataset = config.trust_dataset
+        self.dataset_files = config.data_files
         self.dataset: DatasetDict | None = None  # Delayed download
         self.evaluation_split = as_list(config.evaluation_splits)
         self._docs = None
+
+        assert self.dataset_path or self.dataset_files, "Please provide hf_repo or data_files"
+        if not self.dataset_path:
+            file0 = self.dataset_files.split().pop()
+            self.dataset_path = file0.split('.')[-1]
 
         self._fewshot_docs = None
         self.fewshot_split: str | None = config.few_shots_split or self.get_first_possible_fewshot_splits(
@@ -247,6 +254,7 @@ class LightevalTask:
                 self.trust_dataset,
                 self.dataset_filter,
                 self.dataset_revision,
+                self.dataset_files,
             )
 
         assert self.dataset is not None, f"Dataset {self.dataset_path} not found."
