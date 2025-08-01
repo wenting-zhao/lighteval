@@ -79,7 +79,7 @@ class LightevalTaskConfig:
     hf_filter: Callable[[dict], bool] | None = None
     hf_avail_splits: ListLike[str] = field(default_factory=lambda: ["train", "validation", "test"])
     hf_repo: str = ""
-    data_files: str = ""
+    data_files: str | None = None
 
     # We default to false, to reduce security issues
     trust_dataset: bool = False
